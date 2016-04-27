@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Main Control">
+        <menu>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_status"
+            android:icon="@drawable/test"
+            android:title="Status" />
+        <item
+            android:id="@+id/nav_joystickcontrol"
+            android:icon="@drawable/test"
+            android:title="Joystick Control" />
+        <item
+            android:id="@+id/nav_voicecontrol"
+            android:icon="@drawable/test"
+            android:title="Voice Control" />
+
+    </group>
+        </menu>
+    </item>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/test"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/test"
+                android:title="About" />
+        </menu>
+    </item>
+
+</menu>
