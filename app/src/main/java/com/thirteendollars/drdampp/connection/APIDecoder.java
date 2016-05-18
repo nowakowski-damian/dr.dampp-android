@@ -13,16 +13,16 @@ public class APIDecoder {
 
 
 
-    public byte[] getSetMotorsPack(int turnLeftLevel, int turnRightLevel ){
+    public byte[] setMotors(int leftLevel, int rightLevel ){
 
         byte[] pack = new byte[4];
         pack[0]=SET_MOTORS_ID;
-        pack[1]=(byte)turnLeftLevel;
-        pack[2]=(byte)turnRightLevel;
+        pack[1]=(byte)leftLevel;
+        pack[2]=(byte)rightLevel;
         return pack;
     }
 
-    public byte[] getSetSwitchPack(byte switchIndex, boolean turnOn  ){
+    public byte[] setSwitch(byte switchIndex, boolean turnOn  ){
 
         byte[] pack = new byte[4];
         pack[0]=SET_SWITCH_ID;
@@ -32,7 +32,7 @@ public class APIDecoder {
     }
 
 
-    public byte[] getSetAllSwitchesPack( boolean turnOn  ){
+    public byte[] setAllSwitches( boolean turnOn  ){
 
         byte[] pack = new byte[4];
         pack[0]=SET_ALL_SWITCHES_ID;
@@ -42,7 +42,7 @@ public class APIDecoder {
     }
 
 
-    public byte[] getTurnLeftPack( int angle ){
+    public byte[] turnLeft( int angle ){
 
         byte[] pack = new byte[4];
         pack[0]=LEFT_ID;
@@ -51,7 +51,7 @@ public class APIDecoder {
         return pack;
     }
 
-    public byte[] getTurnRightPack( int angle  ){
+    public byte[] turnRight( int angle  ){
 
         byte[] pack = new byte[4];
         pack[0]=RIGHT_ID;

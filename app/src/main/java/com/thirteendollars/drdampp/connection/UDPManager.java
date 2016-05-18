@@ -28,7 +28,6 @@ public class UDPManager {
 
 
     public void send(byte[] dataToSend ){
-
         new SendDataTask().execute(dataToSend);
     }
 
@@ -37,7 +36,7 @@ public class UDPManager {
 
         @Override
         protected IOException doInBackground(byte[]... data) {
-            DatagramPacket sendPacket = new DatagramPacket(data[0], data.length, mServerAddr, mPortNumber);
+            DatagramPacket sendPacket = new DatagramPacket(data[0], data[0].length, mServerAddr, mPortNumber);
             try {
                 mClientSocket.send(sendPacket);
             } catch (IOException e) {

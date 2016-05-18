@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import com.thirteendollars.drdampp.R;
 import com.thirteendollars.drdampp.fragments.GUIControlFragment;
