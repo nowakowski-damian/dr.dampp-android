@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.thirteendollars.drdampp.R;
 import com.thirteendollars.drdampp.fragments.GUIControlFragment;
+import com.thirteendollars.drdampp.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_voicecontrol) {
 
         } else if (id == R.id.nav_settings) {
+            replaceFragment(R.id.content,new SettingsFragment(),SettingsFragment.FRAGMENT_TAG,null);
 
         } else if (id == R.id.nav_about) {
 

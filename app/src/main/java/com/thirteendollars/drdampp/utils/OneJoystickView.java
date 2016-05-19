@@ -11,10 +11,10 @@ import android.view.View;
 /**
  * Created by Damian Nowakowski on 17.05.16.
  */
-public class JoystickView extends View implements Runnable {
+public class OneJoystickView extends View implements Runnable {
 
 
-    public final static long DEFAULT_LOOP_INTERVAL = 100; // 100 ms
+    public final static long DEFAULT_LOOP_INTERVAL = 200; // 500 ms
 
 
     protected OnJoystickMoveListener onJoystickMoveListener;
@@ -34,12 +34,12 @@ public class JoystickView extends View implements Runnable {
 
 
 
-    public JoystickView(Context context, AttributeSet attrs) {
+    public OneJoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initJoystickViews();
     }
 
-    public JoystickView(Context context, AttributeSet attrs, int defaultStyle) {
+    public OneJoystickView(Context context, AttributeSet attrs, int defaultStyle) {
         super(context, attrs, defaultStyle);
         initJoystickViews();
     }
@@ -50,11 +50,11 @@ public class JoystickView extends View implements Runnable {
         mainCircle.setStyle(Paint.Style.FILL_AND_STROKE);
 
         verticalLine = new Paint();
-        verticalLine.setStrokeWidth(5);
+        verticalLine.setStrokeWidth(15);
         verticalLine.setColor(Color.BLACK);
 
         horizontalLine = new Paint();
-        horizontalLine.setStrokeWidth(5);
+        horizontalLine.setStrokeWidth(15);
         horizontalLine.setColor(Color.BLACK);
 
         button = new Paint(Paint.ANTI_ALIAS_FLAG);

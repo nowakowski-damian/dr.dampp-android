@@ -17,4 +17,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SettingsHeaderTextStyle">
+        <item name="android:textSize">@dimen/settings_header_text_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/grey_text_background</item>
+    </style>
+
 </resources>

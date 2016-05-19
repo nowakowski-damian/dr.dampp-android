@@ -22,11 +22,11 @@ public class APIDecoder {
         return pack;
     }
 
-    public byte[] setSwitch(byte switchIndex, boolean turnOn  ){
+    public byte[] setSwitch(int switchIndex, boolean turnOn  ){
 
         byte[] pack = new byte[4];
         pack[0]=SET_SWITCH_ID;
-        pack[1]=switchIndex;
+        pack[1]=(byte)switchIndex;
         pack[2]= (byte)( turnOn ? 1:0 );
         return pack;
     }

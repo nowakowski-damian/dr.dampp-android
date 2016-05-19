@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,7 +16,7 @@ public class TwoJoysticksView extends View implements Runnable {
 
 
 
-    public final static long DEFAULT_LOOP_INTERVAL = 100; // 100 ms
+    public final static long DEFAULT_LOOP_INTERVAL = 200; // 100 ms
 
 
     private OnJoystickMoveListener onJoystickMoveListener;
@@ -119,6 +120,41 @@ public class TwoJoysticksView extends View implements Runnable {
 
         invalidate();
 
+
+        // if stop touching
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+
+            ySpeedPosition = speedCenterY;
+            xTurnPosition = turnCenterX;
+            thread.interrupt();
+            if (onJoystickMoveListener != null) {
+                onJoystickMoveListener.onValueChanged(0, 0);
+            }
+            return true;
+        }
+
+        // if touched first time
+        if (onJoystickMoveListener != null && event.getAction() == MotionEvent.ACTION_DOWN) {
+
+            if (thread != null && thread.isAlive()) {
+                thread.interrupt();
+            }
+            //if touched in joystick range
+            if( ( Math.abs( turnCenterX - event.getX() ) <= joysticksRadius &&
+                    Math.abs( turnCenterY - event.getY() ) <= joysticksRadius ) ||
+                    (Math.abs( speedCenterX - event.getX() ) <= joysticksRadius &&
+                            Math.abs( speedCenterY - event.getY() ) <= joysticksRadius ) ) {
+                thread = new Thread(this);
+                thread.start();
+            }
+
+            if (onJoystickMoveListener != null ){
+                sendCurrentControllerPosition();
+            }
+            return true;
+        }
+
+
         // if only one finger
         if( event.getPointerCount()<=1 ){
 
@@ -164,32 +200,6 @@ public class TwoJoysticksView extends View implements Runnable {
         }
 
 
-        // if touched first time
-        if (onJoystickMoveListener != null && event.getAction() == MotionEvent.ACTION_DOWN) {
-
-            if (thread != null && thread.isAlive()) {
-                thread.interrupt();
-            }
-
-            thread = new Thread(this);
-            thread.start();
-
-            if (onJoystickMoveListener != null){
-                sendCurrentControllerPosition();
-            }
-        }
-
-
-        // if stop touching
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-
-            ySpeedPosition = speedCenterY;
-            xTurnPosition = turnCenterX;
-            thread.interrupt();
-            if (onJoystickMoveListener != null) {
-                onJoystickMoveListener.onValueChanged(0, 0);
-            }
-        }
 
         return true;
     }

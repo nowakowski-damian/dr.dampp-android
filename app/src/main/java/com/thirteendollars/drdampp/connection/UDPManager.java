@@ -37,6 +37,7 @@ public class UDPManager {
         @Override
         protected IOException doInBackground(byte[]... data) {
             DatagramPacket sendPacket = new DatagramPacket(data[0], data[0].length, mServerAddr, mPortNumber);
+            Log.d(getClass().getName(),"Data: "+data[0][0] +" "+data[0][1] +" "+data[0][2] +" "+data[0][3]);
             try {
                 mClientSocket.send(sendPacket);
             } catch (IOException e) {
