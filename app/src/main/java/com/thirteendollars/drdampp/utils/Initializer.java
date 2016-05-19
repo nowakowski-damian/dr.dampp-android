@@ -13,16 +13,17 @@ import java.net.UnknownHostException;
  */
 public class Initializer extends Application {
 
-    private final String SERVER_IP_ADDRESS = "192.168.0.110";
-    private final int  SERVER_PORT = 9876;
+
 
     public static boolean init_success;
     private UDPManager mUDPManager;
+    private SettingsPreferences mSettings;
 
     @Override
     public void onCreate() {
         super.onCreate();
         init_success=true;
+        mSettings = new SettingsPreferences(this);
         initUDP();
     }
 
@@ -33,7 +34,7 @@ public class Initializer extends Application {
     private void initUDP() {
 
         try {
-            mUDPManager= new UDPManager(SERVER_IP_ADDRESS,SERVER_PORT);
+            mUDPManager= new UDPManager( mSettings.getServerAddress(),mSettings.getServerPort() );
         } catch (UnknownHostException e) {
             init_success=false;
             Log.e(getClass().getName(),e.toString());

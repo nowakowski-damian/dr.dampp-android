@@ -26,6 +26,11 @@ public class UDPManager {
         mPortNumber = portNumber;
     }
 
+    public void setNewSettings(String serverIpAddress,int serverPortNumber) throws UnknownHostException{
+        mPortNumber=serverPortNumber;
+        mServerAddr=InetAddress.getByName(serverIpAddress);
+    }
+
 
     public void send(byte[] dataToSend ){
         new SendDataTask().execute(dataToSend);
