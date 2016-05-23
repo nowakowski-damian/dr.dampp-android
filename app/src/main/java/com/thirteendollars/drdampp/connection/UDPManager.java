@@ -1,68 +1,140 @@
 package com.thirteendollars.drdampp.connection;
 
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.util.Log;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Damian Nowakowski on 27.04.16.
  */
-public class UDPManager {
+public abstract class UDPManager {
 
 
+
+
+    private final int RESPONSE_TIMEOUT_MS = 200;
     private InetAddress mServerAddr;
-    private DatagramSocket mClientSocket;
+    private DatagramSocket mSocket;
     private int mPortNumber;
+    private Queue<byte[]> mRequestsQueue;
+
+    //AsyncTask variables
+    private ConnectionThread mConnection;
+    private byte[] data;
+    private int skippedResponses = 0;
+    private boolean wasPacketSent = false;
+
 
 
     public UDPManager(String serverAddress, int portNumber) throws UnknownHostException, SocketException {
         mServerAddr = InetAddress.getByName(serverAddress);
-        mClientSocket = new DatagramSocket();
+        mSocket = new DatagramSocket(9876);
         mPortNumber = portNumber;
+        mRequestsQueue = new ConcurrentLinkedQueue<>();
+        startListening();
     }
 
-    public void setNewSettings(String serverIpAddress,int serverPortNumber) throws UnknownHostException{
-        mPortNumber=serverPortNumber;
-        mServerAddr=InetAddress.getByName(serverIpAddress);
-    }
-
-
-    public void send(byte[] dataToSend ){
-        new SendDataTask().execute(dataToSend);
+    private void startListening() {
+        mConnection = new ConnectionThread();
+        mConnection.execute();
     }
 
 
-    private class SendDataTask extends AsyncTask<byte[],Void,IOException>{
+    public void setNewSettings(String serverIpAddress, int serverPortNumber) throws UnknownHostException {
+        mPortNumber = serverPortNumber;
+        mServerAddr = InetAddress.getByName(serverIpAddress);
+    }
+
+
+    public void send(byte[] dataToSend) {
+        mRequestsQueue.add(dataToSend);
+    }
+
+
+
+
+
+    private class ConnectionThread extends AsyncTask< Void, Void, SocketTimeoutException> {
 
         @Override
-        protected IOException doInBackground(byte[]... data) {
-            DatagramPacket sendPacket = new DatagramPacket(data[0], data[0].length, mServerAddr, mPortNumber);
-            Log.d(getClass().getName(),"Data: "+data[0][0] +" "+data[0][1] +" "+data[0][2] +" "+data[0][3]);
-            try {
-                mClientSocket.send(sendPacket);
-            } catch (IOException e) {
-                return e;
-            }
+        protected SocketTimeoutException doInBackground(Void... param) {
+
+                DatagramPacket packet;
+
+                if( !mRequestsQueue.isEmpty() ){
+
+                        // send data
+                        try {
+                            data = mRequestsQueue.poll();
+                            packet = new DatagramPacket(data, data.length, mServerAddr, mPortNumber);
+                            mSocket.send(packet);
+                            if(!wasPacketSent) {
+                                skippedResponses = 0;
+                                wasPacketSent=true;
+                            }
+                            Log.d(getClass().getName(), "Sent data: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3]);
+                        } catch (IOException exception) {
+                            Log.e(getClass().getName(), exception.toString());
+                        }
+                }
+
+                // just receive data
+                try {
+                    data = new byte[APIDecoder.MAX_PACKET_LENGTH];
+                    packet = new DatagramPacket(data, data.length);
+                    mSocket.setSoTimeout(RESPONSE_TIMEOUT_MS);
+                    mSocket.receive(packet);
+                    wasPacketSent=false;
+                    Log.d(getClass().getName(), "Received data: " + data[0] + " " + data[1] + " " + data[2] + " " + data[3]);
+                } catch (SocketTimeoutException exception) {
+                    if(wasPacketSent){
+                        skippedResponses++;
+                        return exception;
+                    }
+                    else {
+                        return null;
+                    }
+                } catch (SocketException exception) {
+                    Log.e(getClass().getName(), exception.toString());
+                } catch (IOException exception) {
+                    Log.e(getClass().getName(), exception.toString());
+                }
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(IOException exception) {
-            if( exception != null){
-                //TODO: send package again?
-                Log.e(getClass().getName(),exception.toString() );
+        protected void onPostExecute(SocketTimeoutException exception) {
+            super.onPostExecute(exception);
+            if(exception==null){
+                onDataReceived(data);
             }
             else{
-                Log.d(getClass().getName(),"Data send successfully" );
+                onResponseSkipped(skippedResponses);
             }
+            startListening();
         }
     }
+
+
+    public abstract void onResponseSkipped(int skippedResponses);
+    public abstract void onDataReceived(byte[] data);
+
 }
+
+
 
 
 

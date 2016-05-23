@@ -5,4 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="toolbar_connected_mssg">Connected</string>
+    <string name="toolbar_disconnected_mssg">Disonnected</string>
+    <string name="toolbar_connecting_mssg">Connecting...</string>
 </resources>

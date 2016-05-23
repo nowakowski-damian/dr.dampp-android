@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ToggleButton;
-
 import com.thirteendollars.drdampp.R;
+import com.thirteendollars.drdampp.activities.MainActivity;
 import com.thirteendollars.drdampp.connection.APIDecoder;
 import com.thirteendollars.drdampp.connection.UDPManager;
-import com.thirteendollars.drdampp.utils.Initializer;
 import com.thirteendollars.drdampp.utils.OneJoystickView;
 import com.thirteendollars.drdampp.utils.SettingsPreferences;
 import com.thirteendollars.drdampp.utils.TwoJoysticksView;
@@ -42,7 +41,7 @@ public class GUIControlFragment extends Fragment implements View.OnClickListener
         View view= initAppropriateJoystickFromSettings( settings,inflater,container );
         initButtonsPanel(view);
         mApi=new APIDecoder();
-        mConnection= ((Initializer)getActivity().getApplication()).getConnection();
+        mConnection= ((MainActivity)getActivity()).getConnection();
         return view;
     }
 

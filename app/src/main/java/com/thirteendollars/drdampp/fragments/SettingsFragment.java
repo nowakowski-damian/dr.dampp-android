@@ -12,13 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.thirteendollars.drdampp.R;
+import com.thirteendollars.drdampp.activities.MainActivity;
 import com.thirteendollars.drdampp.connection.UDPManager;
-import com.thirteendollars.drdampp.utils.Initializer;
 import com.thirteendollars.drdampp.utils.SettingsPreferences;
 
 import java.net.UnknownHostException;
@@ -89,7 +88,7 @@ public class SettingsFragment extends Fragment implements RadioGroup.OnCheckedCh
             return;
         }
         //try to change UDPManager settings
-        UDPManager udp= ((Initializer)getActivity().getApplication()).getConnection();
+        UDPManager udp= ((MainActivity)getActivity()).getConnection();
         try {
             udp.setNewSettings(ipAdress,portNum);
         } catch (UnknownHostException e) {

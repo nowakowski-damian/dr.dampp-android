@@ -5,6 +5,9 @@ package com.thirteendollars.drdampp.connection;
  */
 public class APIDecoder {
 
+
+    public static final int MAX_PACKET_LENGTH =4;
+    private final static byte TEST_CONNECTION_ID=-1;
     private final byte SET_MOTORS_ID=0;
     private final byte SET_SWITCH_ID=1;
     private final byte SET_ALL_SWITCHES_ID=1;
@@ -15,7 +18,7 @@ public class APIDecoder {
 
     public byte[] setMotors(int leftLevel, int rightLevel ){
 
-        byte[] pack = new byte[4];
+        byte[] pack = new byte[MAX_PACKET_LENGTH];
         pack[0]=SET_MOTORS_ID;
         pack[1]=(byte)leftLevel;
         pack[2]=(byte)rightLevel;
@@ -24,7 +27,7 @@ public class APIDecoder {
 
     public byte[] setSwitch(int switchIndex, boolean turnOn  ){
 
-        byte[] pack = new byte[4];
+        byte[] pack = new byte[MAX_PACKET_LENGTH];
         pack[0]=SET_SWITCH_ID;
         pack[1]=(byte)switchIndex;
         pack[2]= (byte)( turnOn ? 1:0 );
@@ -34,7 +37,7 @@ public class APIDecoder {
 
     public byte[] setAllSwitches( boolean turnOn  ){
 
-        byte[] pack = new byte[4];
+        byte[] pack = new byte[MAX_PACKET_LENGTH];
         pack[0]=SET_ALL_SWITCHES_ID;
         pack[1]=-1;
         pack[2]= (byte)( turnOn ? 1:0 );
@@ -44,7 +47,7 @@ public class APIDecoder {
 
     public byte[] turnLeft( int angle ){
 
-        byte[] pack = new byte[4];
+        byte[] pack = new byte[MAX_PACKET_LENGTH];
         pack[0]=LEFT_ID;
         pack[1]=0;
         pack[2]= (byte) angle;
@@ -53,11 +56,32 @@ public class APIDecoder {
 
     public byte[] turnRight( int angle  ){
 
-        byte[] pack = new byte[4];
+        byte[] pack = new byte[MAX_PACKET_LENGTH];
         pack[0]=RIGHT_ID;
         pack[1]=1;
         pack[2]= (byte) angle;
         return pack;
+    }
+
+    public static byte[] testConnection(){
+
+        byte[] pack = new byte[MAX_PACKET_LENGTH];
+        pack[0]=TEST_CONNECTION_ID;
+        pack[1]=TEST_CONNECTION_ID;
+        pack[2]= TEST_CONNECTION_ID;
+        pack[3]=TEST_CONNECTION_ID;
+        return pack;
+    }
+
+    public static boolean arePacketsEqual(byte[] pack1,byte[] pack2){
+
+        if(pack1[0]==pack2[0] &&
+           pack1[1]==pack2[1] &&
+           pack1[2]==pack2[2] &&
+           pack1[3]==pack2[3] ){
+                return true;
+        }
+        else return false;
     }
 
 

@@ -16,7 +16,7 @@ public class TwoJoysticksView extends View implements Runnable {
 
 
 
-    public final static long DEFAULT_LOOP_INTERVAL = 200; // 100 ms
+    public final static long DEFAULT_LOOP_INTERVAL = 300; //ms
 
 
     private OnJoystickMoveListener onJoystickMoveListener;

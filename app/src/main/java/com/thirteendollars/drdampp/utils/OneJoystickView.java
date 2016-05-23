@@ -14,7 +14,7 @@ import android.view.View;
 public class OneJoystickView extends View implements Runnable {
 
 
-    public final static long DEFAULT_LOOP_INTERVAL = 200; // 500 ms
+    public final static long DEFAULT_LOOP_INTERVAL = 300; // ms
 
 
     protected OnJoystickMoveListener onJoystickMoveListener;
