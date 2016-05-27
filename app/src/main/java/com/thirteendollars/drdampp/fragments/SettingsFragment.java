@@ -96,11 +96,10 @@ public class SettingsFragment extends Fragment implements RadioGroup.OnCheckedCh
             Log.e(getClass().getName(),e.toString() );
             return;
         }
-        // if everythink ok save to SharedPreferences
+        // if everything is ok save to SharedPreferences
         mSettings.setServerAddress(ipAdress);
         mSettings.setServerPort(portNum);
         Toast.makeText(getActivity(), "Updated",Toast.LENGTH_SHORT).show();
-        //TODO: check connection
     }
 
 

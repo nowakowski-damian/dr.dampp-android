@@ -40,7 +40,7 @@ public abstract class UDPManager {
 
     public UDPManager(String serverAddress, int portNumber) throws UnknownHostException, SocketException {
         mServerAddr = InetAddress.getByName(serverAddress);
-        mSocket = new DatagramSocket(9876);
+        mSocket = new DatagramSocket(portNumber);
         mPortNumber = portNumber;
         mRequestsQueue = new ConcurrentLinkedQueue<>();
         startListening();
@@ -51,10 +51,20 @@ public abstract class UDPManager {
         mConnection.execute();
     }
 
+    public void cancel(){
+        if(mConnection!=null){
+            mConnection.cancel(false);
+        }
+    }
+
 
     public void setNewSettings(String serverIpAddress, int serverPortNumber) throws UnknownHostException {
+        mConnection.cancel(true);
         mPortNumber = serverPortNumber;
         mServerAddr = InetAddress.getByName(serverIpAddress);
+        startListening();
+        //test conncection
+        send( APIDecoder.testConnection() );
     }
 
 
@@ -124,7 +134,9 @@ public abstract class UDPManager {
             else{
                 onResponseSkipped(skippedResponses);
             }
-            startListening();
+            if( !isCancelled() ) {
+                startListening();
+            }
         }
     }
 

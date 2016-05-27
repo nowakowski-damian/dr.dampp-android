@@ -1,13 +1,22 @@
 package com.thirteendollars.drdampp.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.provider.CalendarContract;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.thirteendollars.drdampp.R;
 
 /**
  * Created by Damian Nowakowski on 17.05.16.
@@ -29,7 +38,6 @@ public class TwoJoysticksView extends View implements Runnable {
     private float speedCenterY = 0;
     private Paint speedMainCircle;
     private Paint speedMainButton;
-    private Paint speedVerticalLine;
 
     // Turn joystick
     private float xTurnPosition = 0;
@@ -37,7 +45,6 @@ public class TwoJoysticksView extends View implements Runnable {
     private float turnCenterY = 0;
     private Paint turnMainCircle;
     private Paint turnMainButton;
-    private Paint turnHorizontalLine;
 
     // Common settings
     private int joysticksRadius;
@@ -57,28 +64,14 @@ public class TwoJoysticksView extends View implements Runnable {
     protected void initJoystickView() {
         // speed joystick
         speedMainCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
-        speedMainCircle.setColor(Color.WHITE);
         speedMainCircle.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        speedVerticalLine = new Paint();
-        speedVerticalLine.setStrokeWidth(15);
-        speedVerticalLine.setColor(Color.BLACK);
-
         speedMainButton = new Paint(Paint.ANTI_ALIAS_FLAG);
-        speedMainButton.setColor(Color.GRAY);
         speedMainButton.setStyle(Paint.Style.FILL_AND_STROKE);
 
         // turn joystick
         turnMainCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
-        turnMainCircle.setColor(Color.WHITE);
         turnMainCircle.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        turnHorizontalLine = new Paint();
-        turnHorizontalLine.setStrokeWidth(15);
-        turnHorizontalLine.setColor(Color.BLACK);
-
         turnMainButton = new Paint(Paint.ANTI_ALIAS_FLAG);
-        turnMainButton.setColor(Color.GRAY);
         turnMainButton.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
@@ -96,6 +89,9 @@ public class TwoJoysticksView extends View implements Runnable {
     }
 
 
+
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         // set size
@@ -105,13 +101,15 @@ public class TwoJoysticksView extends View implements Runnable {
         turnCenterY = (getHeight()) / 2;
 
         // paint main circles
+        speedMainCircle.setShader(new RadialGradient(speedCenterX, ySpeedPosition,joysticksRadius*2,Color.GRAY, Color.WHITE, Shader.TileMode.CLAMP));
         canvas.drawCircle(speedCenterX, speedCenterY, joysticksRadius, speedMainCircle);
+        turnMainCircle.setShader(new RadialGradient(xTurnPosition, turnCenterY,joysticksRadius*2,Color.GRAY, Color.WHITE, Shader.TileMode.CLAMP));
         canvas.drawCircle(turnCenterX, turnCenterY, joysticksRadius, turnMainCircle);
-        // paint lines
-        canvas.drawLine(speedCenterX, (speedCenterY - joysticksRadius), speedCenterX,(speedCenterY + joysticksRadius), speedVerticalLine);
-        canvas.drawLine((turnCenterX - joysticksRadius), turnCenterY, (turnCenterX + joysticksRadius), turnCenterY, turnHorizontalLine);
+
         // paint move buttons
+        speedMainButton.setShader(new RadialGradient(speedCenterX, ySpeedPosition,buttonsRadius*2, getResources().getColor(R.color.joystick_button_grey), Color.GRAY, Shader.TileMode.CLAMP));
         canvas.drawCircle(speedCenterX, ySpeedPosition, buttonsRadius, speedMainButton);
+        turnMainButton.setShader(new RadialGradient(xTurnPosition, turnCenterY,buttonsRadius*2, getResources().getColor(R.color.joystick_button_grey), Color.GRAY, Shader.TileMode.CLAMP));
         canvas.drawCircle(xTurnPosition, turnCenterY, buttonsRadius, turnMainButton);
     }
 
@@ -195,6 +193,11 @@ public class TwoJoysticksView extends View implements Runnable {
                         Math.abs( turnCenterY - event.getY(index) ) <= joysticksRadius ) {
 
                     xTurnPosition= event.getX(index);
+                }
+                // if not in range,reset
+                else{
+                    xTurnPosition= turnCenterX;
+                    ySpeedPosition= speedCenterY;
                 }
             }
         }

@@ -93,8 +93,20 @@ public class GUIControlFragment extends Fragment implements View.OnClickListener
     }
 
     private void notifyJoystickChange(int speed, int turn) {
-        int leftLevel=( speed+(turn/2) )%101;
-        int rightLevel=( speed-(turn/2) )%101;
+        int leftLevel;
+        int rightLevel;
+
+        if(speed<0) turn= -turn;
+
+        if(speed*turn>=0){
+            leftLevel= speed;
+            rightLevel= speed-(turn/2);
+        }
+        else {
+            leftLevel= speed+(turn/2);
+            rightLevel= speed;
+        }
+
         mConnection.send( mApi.setMotors(leftLevel,rightLevel) );
     }
 

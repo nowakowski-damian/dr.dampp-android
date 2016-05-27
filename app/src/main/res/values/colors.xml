@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+
+    //basics colors
     <color name="black">#000000</color>
-    <color name="grey_text_background">#bbbbbb</color>
+    <color name="white">#ffffff</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="red">#ff0000</color>
+    <color name="green">#00ff00</color>
+
+    <!--<color name="colorPrimary">#888888</color>-->
+    <!--<color name="colorPrimaryDark">#444444</color>-->
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#2E7D32</color>
+
+
+    //settings
+    <color name="grey_text_background">#999999</color>
+
+    //control gui
+    <color name="joystick_button_grey">#cccccc</color>
+    <color name="buttons_panel_background">#444444</color>
+    <color name="layout_background">#bbbbbb</color>
+
 </resources>

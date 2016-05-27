@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@drawable/background"
+    >
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/fragment_layout_margin"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Wi-Fi:"/>
+            <TextView
+                android:id="@+id/status_wifi_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SSID:"/>
+            <TextView
+                android:id="@+id/status_ssid_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Signal:"/>
+            <TextView
+                android:id="@+id/status_signal_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Phone IP:"/>
+            <TextView
+                android:id="@+id/status_phoneip_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Server IP:"/>
+            <TextView
+                android:id="@+id/status_serverip_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Battery:"/>
+            <TextView
+                android:id="@+id/status_battery_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings_text_background">
+
+            <TextView
+                style="@style/StatusTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Temperature:"/>
+            <TextView
+                android:id="@+id/status_temperature_text"
+                style="@style/StatusTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>
