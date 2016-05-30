@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.thirteendollars.drdampp.R;
 import com.thirteendollars.drdampp.activities.MainActivity;
+import com.thirteendollars.drdampp.connection.APIDecoder;
 import com.thirteendollars.drdampp.connection.UDPManager;
 import com.thirteendollars.drdampp.utils.SettingsPreferences;
 
@@ -99,6 +100,8 @@ public class SettingsFragment extends Fragment implements RadioGroup.OnCheckedCh
         // if everything is ok save to SharedPreferences
         mSettings.setServerAddress(ipAdress);
         mSettings.setServerPort(portNum);
+        //and test connection
+        udp.send(APIDecoder.testConnection() );
         Toast.makeText(getActivity(), "Updated",Toast.LENGTH_SHORT).show();
     }
 

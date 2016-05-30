@@ -33,8 +33,10 @@ public abstract class UDPManager {
     //AsyncTask variables
     private ConnectionThread mConnection;
     private byte[] data;
+    private static byte[] lastData;
     private int skippedResponses = 0;
     private boolean wasPacketSent = false;
+
 
 
 
@@ -69,7 +71,13 @@ public abstract class UDPManager {
 
 
     public void send(byte[] dataToSend) {
-        mRequestsQueue.add(dataToSend);
+        if( APIDecoder.arePacketsEqual(dataToSend,lastData) ){
+            return;
+        }
+        else {
+            lastData = dataToSend;
+            mRequestsQueue.add(dataToSend);
+        }
     }
 
 

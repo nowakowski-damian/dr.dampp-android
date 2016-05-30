@@ -29,8 +29,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#990000"
-            android:text="No connection!"/>
+            android:textColor="@color/darkRed" />
 
         <ImageView
             android:id="@+id/toolbar_connection_icon"
@@ -38,8 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_gravity="center"
-            android:background="@drawable/no_connection"/>
+            android:layout_gravity="center"/>
 
 
 

@@ -6,15 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_status"
-            android:icon="@drawable/test"
+            android:icon="@drawable/status"
             android:title="Status" />
         <item
             android:id="@+id/nav_joystickcontrol"
-            android:icon="@drawable/test"
+            android:icon="@drawable/joystickcontrol"
             android:title="Joystick Control" />
         <item
             android:id="@+id/nav_voicecontrol"
-            android:icon="@drawable/test"
+            android:icon="@drawable/voicecontrol"
             android:title="Voice Control" />
 
     </group>
@@ -25,11 +25,11 @@
         <menu>
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/test"
+                android:icon="@drawable/settings"
                 android:title="Settings" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/test"
+                android:icon="@drawable/about"
                 android:title="About" />
         </menu>
     </item>

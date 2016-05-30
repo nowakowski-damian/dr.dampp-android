@@ -75,6 +75,10 @@ public class APIDecoder {
 
     public static boolean arePacketsEqual(byte[] pack1,byte[] pack2){
 
+        if(pack1==null || pack2==null){
+            return false;
+        }
+
         if(pack1[0]==pack2[0] &&
            pack1[1]==pack2[1] &&
            pack1[2]==pack2[2] &&

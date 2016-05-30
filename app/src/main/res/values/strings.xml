@@ -18,4 +18,14 @@
     <string name="about_app">Application has been written to control any remote vehicle supporting Wi-Fi connection. Communication is based on UDP protocol, API description is available in the links below. Feel free to copy and re-use app code as needed,but I would appreciate it if you give me a credit for any work of mine that you use.</string>
     <string name="about_github_link">Github: <a href="https://www.github.com/thirteendollars/phone-dr.dampp/">Click!</a></string>
     <string name="about_api_link">API:</string>
+    <string name="voicelayout_stop_button">Stop</string>
+    <string name="voicecontroller_init_success">Loaded! Start speaking...</string>
+    <string name="voicecontrol_failed">Initialiation failed.</string>
+    <string name="voicecontrol_error">Error occurred!</string>
+    <string name="voicecontrol_initializing">Initializing...</string>
+    <string name="command_stop">Stop</string>
+    <string name="command_right">Turn right</string>
+    <string name="command_left">Turn left</string>
+    <string name="command_back">Go back</string>
+    <string name="command_goahead">Go ahead</string>
 </resources>

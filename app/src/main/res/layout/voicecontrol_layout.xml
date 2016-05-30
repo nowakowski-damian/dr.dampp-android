@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        
+        <TextView
+            android:id="@+id/voicecontrol_heard_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textSize="32sp"
+            android:text="Initializing..."/>
+        
+        <LinearLayout
+            android:id="@+id/buttons_layout"
+            android:background="@color/buttons_panel_background"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    
+            <LinearLayout
+        
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+        
+            <ToggleButton
+                android:id="@+id/control_button_0"
+                android:background="@drawable/custom_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="3dp"
+                />
+        
+            <ToggleButton
+                android:id="@+id/control_button_1"
+                android:background="@drawable/custom_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="3dp"
+                />
+        
+            <ToggleButton
+                android:id="@+id/control_button_2"
+                android:background="@drawable/custom_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="3dp"
+                />
+        
+            <ToggleButton
+                android:id="@+id/control_button_3"
+                android:background="@drawable/custom_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="3dp"
+                />
+        
+            <ToggleButton
+                android:id="@+id/control_button_4"
+                android:background="@drawable/custom_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="3dp"
+                />
+        
+            <ToggleButton
+                android:id="@+id/control_button_5"
+                android:background="@drawable/custom_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="3dp"
+                />
+        
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+    
+        </LinearLayout>
+        
+        <Button
+            android:id="@+id/voicecontrol_stop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="@drawable/voicecontrol_stop_button"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/voicelayout_stop_button"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

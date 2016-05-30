@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,6 +26,7 @@ import com.thirteendollars.drdampp.fragments.AboutFragment;
 import com.thirteendollars.drdampp.fragments.GUIControlFragment;
 import com.thirteendollars.drdampp.fragments.SettingsFragment;
 import com.thirteendollars.drdampp.fragments.StatusFragment;
+import com.thirteendollars.drdampp.fragments.VoiceControlFragment;
 import com.thirteendollars.drdampp.utils.SettingsPreferences;
 
 import java.net.SocketException;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private TextView mToolbarRightText;
 
     private int mSignalStrength; // 0-100%
+    private boolean connectionLowQuality;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mSettings = new SettingsPreferences(this);
         mSignalStrength=0;
+        connectionLowQuality=true;
         initViews();
         replaceFragment(R.id.content,new StatusFragment(),StatusFragment.FRAGMENT_TAG,null);
     }
@@ -61,10 +65,6 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         initUDP();
-        //test connection
-        if(mUDPManager!=null) {
-            mUDPManager.send(APIDecoder.testConnection());
-        }
         mSignalStatusThread=new UpdateSignalStatus();
         mSignalStatusThread.execute();
     }
@@ -85,12 +85,16 @@ public class MainActivity extends AppCompatActivity
             mUDPManager = new UDPManager(mSettings.getServerAddress(), mSettings.getServerPort()){
                 @Override
                 public void onResponseSkipped(int skippedResponses) {
+                    if( skippedResponses >1 ){
+                        connectionLowQuality=true;
+                    }
+                    Log.e(getClass().getName(),"RESPONSE SKIPPED:"+skippedResponses);
                     }
 
 
                 @Override
                 public void onDataReceived(byte[] data) {
-
+                    connectionLowQuality=true;
                 }
             };
         } catch (UnknownHostException exception) {
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_voicecontrol) {
             mToolbarMainText.setText(R.string.toolbar_voice_control);
+            replaceFragment(R.id.content,new VoiceControlFragment(),VoiceControlFragment.FRAGMENT_TAG,null);
 
         } else if (id == R.id.nav_settings) {
             mToolbarMainText.setText(R.string.toolbar_settings);
@@ -227,7 +232,14 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Void v) {
             super.onPostExecute(v);
-            setConnectionQuality( (int)Math.round( (mSignalStrength)/25. ) );
+            if( connectionLowQuality ){
+                setConnectionQuality(0);
+                mUDPManager.send( APIDecoder.testConnection() );
+
+            }
+            else {
+                setConnectionQuality((int) Math.round((mSignalStrength) / 25.));
+            }
             if( !isCancelled() ) {
                 mSignalStatusThread = new UpdateSignalStatus();
                 mSignalStatusThread.execute();
@@ -260,7 +272,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 default:
                     mToolbarRightText.setText(R.string.toolbar_disconnected_mssg);
-                    mToolbarRightText.setTextColor(Color.parseColor("#990000"));
+                    mToolbarRightText.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.darkRed));
                     mToolbarConnectionIcon.setImageResource(R.drawable.no_connection);
             }
         }
