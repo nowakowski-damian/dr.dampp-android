@@ -7,7 +7,7 @@ public class APIDecoder {
 
 
     public static final int MAX_PACKET_LENGTH =4;
-    private final static byte TEST_CONNECTION_ID=-1;
+    private final static byte TEST_CONNECTION_ID=127;
     private final byte SET_MOTORS_ID=0;
     private final byte SET_SWITCH_ID=1;
     private final byte SET_ALL_SWITCHES_ID=1;

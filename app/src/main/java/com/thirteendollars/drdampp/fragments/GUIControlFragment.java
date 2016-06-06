@@ -40,9 +40,14 @@ public class GUIControlFragment extends Fragment implements View.OnClickListener
         SettingsPreferences settings= new SettingsPreferences( getActivity().getApplicationContext() );
         View view= initAppropriateJoystickFromSettings( settings,inflater,container );
         initButtonsPanel(view);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mApi=new APIDecoder();
         mConnection= ((MainActivity)getActivity()).getConnection();
-        return view;
     }
 
     private void initButtonsPanel(View view) {
@@ -107,7 +112,7 @@ public class GUIControlFragment extends Fragment implements View.OnClickListener
             rightLevel= speed;
         }
 
-        mConnection.send( mApi.setMotors(leftLevel,rightLevel) );
+            mConnection.send( mApi.setMotors(leftLevel,rightLevel) );
     }
 
     @Override

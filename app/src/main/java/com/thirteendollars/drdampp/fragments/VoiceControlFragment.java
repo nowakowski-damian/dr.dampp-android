@@ -47,14 +47,14 @@ public class VoiceControlFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.voicecontrol_layout,container,false);
         initViews(view);
-        mUDPManager=((MainActivity)getActivity()).getConnection();
-        mApi= new APIDecoder();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mUDPManager=((MainActivity)getActivity()).getConnection();
+        mApi= new APIDecoder();
         mVoiceController=initVoiceController();
         mVoiceController.execute();
     }

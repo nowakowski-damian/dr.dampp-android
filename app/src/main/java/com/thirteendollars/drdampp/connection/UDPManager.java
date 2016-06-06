@@ -36,6 +36,7 @@ public abstract class UDPManager {
     private static byte[] lastData;
     private int skippedResponses = 0;
     private boolean wasPacketSent = false;
+    private int timeoutCounter=0;
 
 
 
@@ -46,6 +47,7 @@ public abstract class UDPManager {
         mPortNumber = portNumber;
         mRequestsQueue = new ConcurrentLinkedQueue<>();
         startListening();
+        send( APIDecoder.testConnection() );
     }
 
     private void startListening() {
@@ -71,7 +73,7 @@ public abstract class UDPManager {
 
 
     public void send(byte[] dataToSend) {
-        if( APIDecoder.arePacketsEqual(dataToSend,lastData) ){
+        if( !APIDecoder.arePacketsEqual( dataToSend,APIDecoder.testConnection() ) && APIDecoder.arePacketsEqual(dataToSend,lastData) ){
             return;
         }
         else {
@@ -79,7 +81,6 @@ public abstract class UDPManager {
             mRequestsQueue.add(dataToSend);
         }
     }
-
 
 
 
@@ -94,6 +95,7 @@ public abstract class UDPManager {
                 if( !mRequestsQueue.isEmpty() ){
 
                         // send data
+                        timeoutCounter=0;
                         try {
                             data = mRequestsQueue.poll();
                             packet = new DatagramPacket(data, data.length, mServerAddr, mPortNumber);
@@ -109,6 +111,7 @@ public abstract class UDPManager {
                 }
 
                 // just receive data
+                timeoutCounter++;
                 try {
                     data = new byte[APIDecoder.MAX_PACKET_LENGTH];
                     packet = new DatagramPacket(data, data.length);
@@ -122,6 +125,7 @@ public abstract class UDPManager {
                         return exception;
                     }
                     else {
+                        data=null;
                         return null;
                     }
                 } catch (SocketException exception) {
@@ -137,10 +141,22 @@ public abstract class UDPManager {
         protected void onPostExecute(SocketTimeoutException exception) {
             super.onPostExecute(exception);
             if(exception==null){
-                onDataReceived(data);
+                if(data!=null) {
+                    onDataReceived(data);
+                }
+                else if( timeoutCounter>=10 ){
+                    timeoutCounter=0;
+                    send( APIDecoder.testConnection() );
+                }
             }
             else{
-                onResponseSkipped(skippedResponses);
+                if(skippedResponses>20){
+                    wasPacketSent=false;
+                }
+                else {
+                    onResponseSkipped(skippedResponses);
+                }
+
             }
             if( !isCancelled() ) {
                 startListening();

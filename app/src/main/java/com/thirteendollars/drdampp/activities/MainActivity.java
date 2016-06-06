@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,9 +36,6 @@ import java.net.UnknownHostException;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private final int SIGNAL_CHECK_THREAD_DELAY_MS = 2000;
-
-    private UpdateSignalStatus mSignalStatusThread;
     private UDPManager mUDPManager;
     private SettingsPreferences mSettings;
 
@@ -64,18 +62,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        initUDP();
-        mSignalStatusThread=new UpdateSignalStatus();
-        mSignalStatusThread.execute();
+        if( mUDPManager==null ) {
+            initUDP();
+        }
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mUDPManager.cancel();
-        mSignalStatusThread.cancel(true);
-        mUDPManager=null;
-        mSignalStatusThread=null;
+    protected void onDestroy() {
+        super.onDestroy();
+        if( mUDPManager!=null) {
+            mUDPManager.cancel();
+            mUDPManager=null;
+        }
     }
 
     private void initUDP() {
@@ -86,15 +84,16 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onResponseSkipped(int skippedResponses) {
                     if( skippedResponses >1 ){
-                        connectionLowQuality=true;
+                        setConnectionQuality(0);
                     }
                     Log.e(getClass().getName(),"RESPONSE SKIPPED:"+skippedResponses);
                     }
 
-
                 @Override
                 public void onDataReceived(byte[] data) {
-                    connectionLowQuality=true;
+                    WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                    mSignalStrength = WifiManager.calculateSignalLevel( manager.getConnectionInfo().getRssi(),101 );
+                    setConnectionQuality((int) Math.round((mSignalStrength) / 25.));
                 }
             };
         } catch (UnknownHostException exception) {
@@ -214,70 +213,39 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void setConnectionQuality(int signal) {
 
-    private class UpdateSignalStatus extends AsyncTask<Void,Void,Void>{
+        switch (signal) {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-            mSignalStrength = manager.calculateSignalLevel( manager.getConnectionInfo().getRssi(),101 );
-            try {
-                Thread.sleep(SIGNAL_CHECK_THREAD_DELAY_MS);
-            } catch (InterruptedException e) {
-                Log.e(getClass().getName(),e.toString());
-            }
-            return null;
+            case 4:
+                mToolbarRightText.setText(R.string.toolbar_connected_mssg);
+                mToolbarRightText.setTextColor(Color.GREEN);
+                mToolbarConnectionIcon.setImageResource(R.drawable.ok_connection);
+                break;
+            case 3:
+                mToolbarRightText.setText(R.string.toolbar_connected_mssg);
+                mToolbarRightText.setTextColor(Color.GREEN);
+                mToolbarConnectionIcon.setImageResource(R.drawable.one_s_connection);
+                break;
+            case 2:
+                mToolbarRightText.setText(R.string.toolbar_connected_mssg);
+                mToolbarRightText.setTextColor(Color.GREEN);
+                mToolbarConnectionIcon.setImageResource(R.drawable.two_s_connection);
+                break;
+            case 1:
+                mToolbarRightText.setText(R.string.toolbar_connected_mssg);
+                mToolbarRightText.setTextColor(Color.GREEN);
+                mToolbarConnectionIcon.setImageResource(R.drawable.three_s_connection);
+                break;
+            default:
+                mToolbarRightText.setText(R.string.toolbar_disconnected_mssg);
+                mToolbarRightText.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.darkRed));
+                mToolbarConnectionIcon.setImageResource(R.drawable.no_connection);
         }
-
-        @Override
-        protected void onPostExecute(Void v) {
-            super.onPostExecute(v);
-            if( connectionLowQuality ){
-                setConnectionQuality(0);
-                mUDPManager.send( APIDecoder.testConnection() );
-
-            }
-            else {
-                setConnectionQuality((int) Math.round((mSignalStrength) / 25.));
-            }
-            if( !isCancelled() ) {
-                mSignalStatusThread = new UpdateSignalStatus();
-                mSignalStatusThread.execute();
-            }
-        }
-
-        private void setConnectionQuality(int signal) {
-
-            switch (signal) {
-
-                case 4:
-                    mToolbarRightText.setText(R.string.toolbar_connected_mssg);
-                    mToolbarRightText.setTextColor(Color.GREEN);
-                    mToolbarConnectionIcon.setImageResource(R.drawable.ok_connection);
-                    break;
-                case 3:
-                    mToolbarRightText.setText(R.string.toolbar_connected_mssg);
-                    mToolbarRightText.setTextColor(Color.GREEN);
-                    mToolbarConnectionIcon.setImageResource(R.drawable.one_s_connection);
-                    break;
-                case 2:
-                    mToolbarRightText.setText(R.string.toolbar_connected_mssg);
-                    mToolbarRightText.setTextColor(Color.GREEN);
-                    mToolbarConnectionIcon.setImageResource(R.drawable.two_s_connection);
-                    break;
-                case 1:
-                    mToolbarRightText.setText(R.string.toolbar_connected_mssg);
-                    mToolbarRightText.setTextColor(Color.GREEN);
-                    mToolbarConnectionIcon.setImageResource(R.drawable.three_s_connection);
-                    break;
-                default:
-                    mToolbarRightText.setText(R.string.toolbar_disconnected_mssg);
-                    mToolbarRightText.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.darkRed));
-                    mToolbarConnectionIcon.setImageResource(R.drawable.no_connection);
-            }
-        }
-
     }
+
+
+
 
 
 }
