@@ -28,4 +28,5 @@
     <string name="command_left">Turn left</string>
     <string name="command_back">Go back</string>
     <string name="command_goahead">Go ahead</string>
+    <string name="permission_error">You cannot use dr.dampp without this permissions :(</string>
 </resources>

@@ -27,7 +27,7 @@
     <style name="StatusTextStyle">
         <item name="android:textSize">@dimen/status_text_size</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:padding">3dp</item>
+        <item name="android:layout_margin">3dp</item>
     </style>
 
     <style name="AboutTextStyle">

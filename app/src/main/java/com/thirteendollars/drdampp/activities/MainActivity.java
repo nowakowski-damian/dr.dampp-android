@@ -1,12 +1,17 @@
 package com.thirteendollars.drdampp.activities;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +24,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.thirteendollars.drdampp.R;
 import com.thirteendollars.drdampp.connection.APIDecoder;
@@ -32,6 +38,8 @@ import com.thirteendollars.drdampp.utils.SettingsPreferences;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -46,23 +54,52 @@ public class MainActivity extends AppCompatActivity
     private TextView mToolbarRightText;
 
     private int mSignalStrength; // 0-100%
-    private boolean connectionLowQuality;
+
+    private final int PERMISSION_REQUESTS = 1;
+    boolean mAllPermissionsGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mSettings = new SettingsPreferences(this);
-        mSignalStrength=0;
-        connectionLowQuality=true;
-        initViews();
-        replaceFragment(R.id.content,new StatusFragment(),StatusFragment.FRAGMENT_TAG,null);
+        mAllPermissionsGranted=true;
+        if(Build.VERSION.SDK_INT>=23) {
+            askForAllPermissions();
+        }
+        if(mAllPermissionsGranted) {
+            mSettings = new SettingsPreferences(this);
+            mSignalStrength=0;
+            initViews();
+            replaceFragment(R.id.content, new StatusFragment(), StatusFragment.FRAGMENT_TAG, null);
+        }
+    }
+
+    private void askForAllPermissions() {
+
+        List<String> permissions = new ArrayList<>();
+
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_WIFI_STATE)!= PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_WIFI_STATE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.INTERNET)!= PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.INTERNET);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+
+        if( !permissions.isEmpty() ) {
+            ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), PERMISSION_REQUESTS);
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if( mUDPManager==null ) {
+        if( mUDPManager==null && mAllPermissionsGranted) {
             initUDP();
         }
     }
@@ -73,6 +110,24 @@ public class MainActivity extends AppCompatActivity
         if( mUDPManager!=null) {
             mUDPManager.cancel();
             mUDPManager=null;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==PERMISSION_REQUESTS){
+
+            for(int i=0;i<grantResults.length;i++){
+                if(grantResults[i]==PackageManager.PERMISSION_DENIED ){
+                    mAllPermissionsGranted=false;
+                    break;
+                }
+            }
+
+            if( !mAllPermissionsGranted ){
+                Toast.makeText(getApplicationContext(), R.string.permission_error,Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
     }
 
