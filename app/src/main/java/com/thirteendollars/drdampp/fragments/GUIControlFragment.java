@@ -101,18 +101,20 @@ public class GUIControlFragment extends Fragment implements View.OnClickListener
         int leftLevel;
         int rightLevel;
 
-        if(speed<0) turn= -turn;
-
-        if(speed*turn>=0){
-            leftLevel= speed;
-            rightLevel= speed-(turn/2);
+        if( speed == 0 ) {
+            leftLevel = turn / 2;
+            rightLevel = -turn / 2;
         }
-        else {
-            leftLevel= speed+(turn/2);
-            rightLevel= speed;
+        else if(speed>0) {
+            leftLevel=Math.min(speed+turn/2,100);
+            rightLevel=Math.min(speed-turn/2,100);
+        }
+        else{
+            leftLevel=Math.max(speed-turn/2,-100);
+            rightLevel=Math.max(speed+turn/2,-100);
         }
 
-            mConnection.send( mApi.setMotors(leftLevel,rightLevel) );
+        mConnection.send( mApi.setMotors(leftLevel,rightLevel) );
     }
 
     @Override

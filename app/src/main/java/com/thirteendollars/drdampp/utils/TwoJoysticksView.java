@@ -24,7 +24,6 @@ import com.thirteendollars.drdampp.R;
 public class TwoJoysticksView extends View implements Runnable {
 
 
-
     public final static long DEFAULT_LOOP_INTERVAL = 300; //ms
 
 
@@ -115,9 +114,7 @@ public class TwoJoysticksView extends View implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         invalidate();
-
 
         // if stop touching
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -151,7 +148,6 @@ public class TwoJoysticksView extends View implements Runnable {
             }
             return true;
         }
-
 
         // if only one finger
         if( event.getPointerCount()<=1 ){
@@ -194,15 +190,13 @@ public class TwoJoysticksView extends View implements Runnable {
 
                     xTurnPosition= event.getX(index);
                 }
-                // if not in range,reset
+                // if finger is not in range, reset/center joysticks
                 else{
                     xTurnPosition= turnCenterX;
                     ySpeedPosition= speedCenterY;
                 }
             }
         }
-
-
 
         return true;
     }
